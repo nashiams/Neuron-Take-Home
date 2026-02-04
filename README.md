@@ -30,69 +30,63 @@ That's essentially all the detail we got from the client.
 
 Build a working web application that addresses the client's needs. Use the provided seed data to populate the system with the historical data the HR team compiled.
 
-### Technical Preferences
+## Frontend Pages ↔ Backend Routes Mapping
 
-We work primarily with **React, TypeScript, Vite, Tailwind CSS, and shadcn/ui** on the frontend, and **Node.js with Express or Fastify** on the backend. You're welcome to use these or other technologies you're most productive with — just be prepared to explain your choices.
+Frontend PageBackend Routes Used
 
-### AI Tools
+1. Login pagePOST /api/auth/login
+2. Create request formPOST /api/requests
+3. My request historyGET /api/requests/my-requests
+4. Pending requests (manager)GET /api/requests/pending-approvals PATCH /api/requests/:id/approve PATCH /api/requests/:id/reject
+5. My approved history (manager)GET /api/requests/my-approvals
 
-We actively encourage the use of AI coding tools — Claude Code, Cursor, GitHub Copilot, ChatGPT, or whatever you normally use. AI-assisted development is part of our standard workflow, and knowing how to leverage these tools effectively is a skill we value.
+-- 1. departments table
+CREATE TABLE departments (
+id VARCHAR(50) PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+location VARCHAR(100) NOT NULL
+);
 
-If you do use AI tools, please include a brief section in your README describing:
+-- 2. employees table
+CREATE TABLE employees (
+id VARCHAR(50) PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+email VARCHAR(100) UNIQUE NOT NULL,
+role VARCHAR(100) NOT NULL,
+department_id VARCHAR(50) NOT NULL,
+manager_id VARCHAR(50),
+status VARCHAR(20) DEFAULT 'active',
+join_date DATE NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-- Which tools you used and for what
-- Where the AI was most and least helpful
-- Any AI-generated output you had to significantly correct or rethink
+FOREIGN KEY (department_id) REFERENCES departments(id),
+FOREIGN KEY (manager_id) REFERENCES employees(id)
+);
 
-We're not testing whether you can code without AI — we're testing whether you can **direct AI effectively** to solve a real problem and **maintain ownership of the result**. You should be able to explain and defend every decision in your codebase, regardless of how it was produced.
+-- 3. requests table
+CREATE TABLE requests (
+id VARCHAR(50) PRIMARY KEY,
+type VARCHAR(20) NOT NULL, -- 'purchase', 'leave', 'overtime'
+submitted_by VARCHAR(50) NOT NULL,
+submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'approved', 'rejected'
+approved_by VARCHAR(50),
+approved_at TIMESTAMP,
+rejected_by VARCHAR(50),
+rejected_at TIMESTAMP,
+details JSONB NOT NULL, -- Store type-specific details as JSON
+notes TEXT,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-### What to Submit
+FOREIGN KEY (submitted_by) REFERENCES employees(id),
+FOREIGN KEY (approved_by) REFERENCES employees(id),
+FOREIGN KEY (rejected_by) REFERENCES employees(id)
+);
 
-- A GitHub repository with your solution
-- The application should run locally with minimal setup (ideally `npm install` and a start command or two)
-- A **README** explaining your approach, the decisions you made, and anything else you think is important
-
-### Time Guidance
-
-- You have **5 calendar days** from receiving this assignment
-- We expect roughly **4–6 hours** of focused work — please don't spend an entire weekend on this
-- We'd rather see a well-thought-out partial solution than a rushed complete one
-
-### What Happens Next
-
-After you submit, we'll schedule a **45–60 minute technical discussion** where we'll talk through your solution — the decisions you made, the tradeoffs you considered, and how you'd evolve the system. We're more interested in how you think than in pixel-perfect UI.
-
----
-
-## Seed Data
-
-We've shared three JSON files along with this brief:
-
-- **`departments.json`** — Company departments
-- **`employees.json`** — Employee roster with reporting relationships
-- **`requests.json`** — Historical approval requests compiled from WhatsApp and email records
-
-This data reflects what the client gave us. Import it however you see fit.
-
----
-
-## System Design Consideration
-
-During our discussion, we'd like to explore how this system might evolve. In particular, the client mentioned two things that could come up in a future phase:
-
-1. **"What happens when a manager is on leave or unavailable for an extended period?"**
-2. **"For purchase requests above Rp 100 juta (100 million), we probably need the director to also approve, not just the department manager."**
-
-You don't need to implement these, but we'd love to hear how you'd approach making the approval workflow **configurable** — so the company could adjust approval rules without needing a developer to change code every time.
-
-Think about this and be prepared to discuss your approach. If you'd like, you can include a brief write-up in your README or a separate design document.
-
----
-
-## Questions?
-
-If you have questions about the assignment, you can send us a message. That said, in real client work, you don't always get the chance to clarify everything upfront — so use your best judgment where things are ambiguous, and document your assumptions. We value how you handle uncertainty as much as how you write code.
-
-Good luck, and we look forward to seeing your work.
-
-— **Engineering Team**
+-- Indexes for performance
+CREATE INDEX idx_requests_submitted_by ON requests(submitted_by);
+CREATE INDEX idx_requests_status ON requests(status);
+CREATE INDEX idx_requests_approved_by ON requests(approved_by);
+CREATE INDEX idx_requests_rejected_by ON requests(rejected_by);
+CREATE INDEX idx_employees_email ON employees(email);
+CREATE INDEX idx_employees_department_id ON employees(department_id);
