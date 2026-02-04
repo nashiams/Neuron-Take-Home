@@ -1,30 +1,84 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class Employee extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Employee.belongsTo(models.Department, {
+        foreignKey: "department_id",
+        as: "department",
+      });
+
+      Employee.belongsTo(models.Employee, {
+        foreignKey: "manager_id",
+        as: "manager",
+      });
+
+      Employee.hasMany(models.Employee, {
+        foreignKey: "manager_id",
+        as: "subordinates",
+      });
+
+      Employee.hasMany(models.Request, {
+        foreignKey: "submitted_by",
+        as: "submitted_requests",
+      });
+
+      Employee.hasMany(models.Request, {
+        foreignKey: "approved_by",
+        as: "approved_requests",
+      });
+
+      Employee.hasMany(models.Request, {
+        foreignKey: "rejected_by",
+        as: "rejected_requests",
+      });
     }
   }
-  Employee.init({
-    id: DataTypes.STRING,
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    role: DataTypes.STRING,
-    department_id: DataTypes.STRING,
-    manager_id: DataTypes.STRING,
-    status: DataTypes.STRING,
-    join_date: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'Employee',
-  });
+
+  Employee.init(
+    {
+      id: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      department_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      manager_id: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      status: {
+        type: DataTypes.STRING,
+        defaultValue: "active",
+      },
+      join_date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Employee",
+      tableName: "Employees",
+    },
+  );
+
   return Employee;
 };

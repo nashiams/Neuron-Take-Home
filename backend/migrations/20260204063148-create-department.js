@@ -10,9 +10,11 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       location: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -24,6 +26,7 @@ module.exports = {
       },
     });
   },
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Departments");
   },

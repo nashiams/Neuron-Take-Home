@@ -32,7 +32,19 @@ Build a working web application that addresses the client's needs. Use the provi
 
 ## Frontend Pages ↔ Backend Routes Mapping
 
-Frontend PageBackend Routes Used
+Frontend Page - Backend Routes Used
+
+routes
+
+1. POST /api/auth/login
+2. POST /api/requests
+3. GET /api/requests/my-requests
+4. GET /api/requests/pending-approvals (manager only)
+5. PATCH /api/requests/:id/approve (manager only)
+6. PATCH /api/requests/:id/reject (manager only)
+7. GET /api/requests/my-approvals (manager only)
+
+====
 
 1. Login pagePOST /api/auth/login
 2. Create request formPOST /api/requests
@@ -90,3 +102,41 @@ CREATE INDEX idx_requests_approved_by ON requests(approved_by);
 CREATE INDEX idx_requests_rejected_by ON requests(rejected_by);
 CREATE INDEX idx_employees_email ON employees(email);
 CREATE INDEX idx_employees_department_id ON employees(department_id);
+
+
+POST   /api/requests
+  Headers: { Authorization: "Bearer <token>" }
+  Body: { 
+    type: "purchase" | "leave" | "overtime",
+    details: { ... },  // based on type
+    notes?: string 
+  }
+  Response: { request: Request }
+  // Auto-fills: submitted_by, submitted_at, status: "pending"
+
+GET    /api/requests/my-requests
+  Headers: { Authorization: "Bearer <token>" }
+  Response: { requests: Request[] }
+  // Returns requests where submitted_by === logged-in user
+
+  GET    /api/requests/pending-approvals
+  Headers: { Authorization: "Bearer <token>" }
+  Response: { requests: Request[] }
+  // Returns pending requests from their department
+
+PATCH  /api/requests/:id/approve
+  Headers: { Authorization: "Bearer <token>" }
+  Body: { notes?: string }
+  Response: { request: Request }
+  // Updates: status, approved_by, approved_at
+
+PATCH  /api/requests/:id/reject
+  Headers: { Authorization: "Bearer <token>" }
+  Body: { notes?: string }
+  Response: { request: Request }
+  // Updates: status, rejected_by, rejected_at
+
+GET    /api/requests/my-approvals
+  Headers: { Authorization: "Bearer <token>" }
+  Response: { requests: Request[] }
+  // Returns requests where approved_by or rejected_by === logged-in user

@@ -76,7 +76,6 @@ module.exports = {
       },
     });
 
-    // Add indexes
     await queryInterface.addIndex("Requests", ["submitted_by"]);
     await queryInterface.addIndex("Requests", ["status"]);
     await queryInterface.addIndex("Requests", ["approved_by"]);

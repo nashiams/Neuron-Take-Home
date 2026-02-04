@@ -1,24 +1,21 @@
-require("dotenv").config({ path: "../.env" });
-
-const dbName = process.env.DB_NAME || "neuron_take_home_db";
-const dbHost = process.env.DB_HOST || "127.0.0.1";
-const dbPort = process.env.DB_PORT || 5433;
+require("dotenv").config();
 
 module.exports = {
   development: {
     username: process.env.DB_USER || "postgres",
     password: process.env.DB_PASSWORD || "postgres",
-    database: dbName,
-    host: dbHost,
-    port: dbPort,
+    database: process.env.DB_NAME || "approval_system",
+    host: process.env.DB_HOST || "localhost",
+    port: process.env.DB_PORT || 5433,
     dialect: "postgres",
+    logging: false,
   },
   test: {
     username: process.env.DB_USER || "postgres",
     password: process.env.DB_PASSWORD || "postgres",
-    database: `${dbName}`,
-    host: dbHost,
-    port: dbPort,
+    database: "approval_system_test",
+    host: process.env.DB_HOST || "localhost",
+    port: process.env.DB_PORT || 5433,
     dialect: "postgres",
     logging: false,
   },
@@ -27,7 +24,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    port: process.env.DB_PORT || 5433,
     dialect: "postgres",
   },
 };
