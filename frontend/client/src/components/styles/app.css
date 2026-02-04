@@ -1,0 +1,272 @@
+@import url("https://fonts.googleapis.com/css2?family=Pontano+Sans:wght@300;400;700&display=swap");
+
+:root {
+  --github-bg: #0d1117;
+  --github-bg-secondary: #161b22;
+  --github-border: #30363d;
+  --github-text: #c9d1d9;
+  --github-text-secondary: #8b949e;
+  --github-blue: #58a6ff;
+  --github-green: #3fb950;
+  --github-red: #f85149;
+  --github-orange: #d29922;
+  --github-purple: #bc8cff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Pontano Sans", sans-serif;
+  font-weight: 400;
+  background-color: var(--github-bg);
+  color: var(--github-text);
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  color: var(--github-text);
+}
+
+/* Bootstrap overrides */
+.bg-dark {
+  background-color: var(--github-bg-secondary) !important;
+}
+
+.btn-primary {
+  background-color: var(--github-blue);
+  border-color: var(--github-blue);
+}
+
+.btn-primary:hover {
+  background-color: #1f6feb;
+  border-color: #1f6feb;
+}
+
+.btn-success {
+  background-color: var(--github-green);
+  border-color: var(--github-green);
+}
+
+.btn-danger {
+  background-color: var(--github-red);
+  border-color: var(--github-red);
+}
+
+.card {
+  background-color: var(--github-bg-secondary);
+  border: 1px solid var(--github-border);
+  color: var(--github-text);
+}
+
+.form-control,
+.form-select {
+  background-color: var(--github-bg);
+  border: 1px solid var(--github-border);
+  color: var(--github-text);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--github-bg);
+  border-color: var(--github-blue);
+  color: var(--github-text);
+  box-shadow: 0 0 0 0.25rem rgba(88, 166, 255, 0.25);
+}
+
+.form-label {
+  color: var(--github-text);
+  font-weight: 700;
+}
+
+.table {
+  color: var(--github-text);
+}
+
+.table-dark {
+  --bs-table-bg: var(--github-bg-secondary);
+  --bs-table-border-color: var(--github-border);
+}
+
+.badge {
+  font-weight: 700;
+}
+
+.bg-warning {
+  background-color: var(--github-orange) !important;
+  color: #000 !important;
+}
+
+.bg-success {
+  background-color: var(--github-green) !important;
+}
+
+.bg-danger {
+  background-color: var(--github-red) !important;
+}
+
+.navbar {
+  border-bottom: 1px solid var(--github-border);
+}
+
+.navbar-brand {
+  font-weight: 700;
+}
+
+.nav-link {
+  color: var(--github-text-secondary);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--github-text);
+}
+
+/* Login page */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--github-bg);
+}
+
+.login-card {
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Request cards */
+.request-card {
+  transition: transform 0.2s;
+  margin-bottom: 1rem;
+}
+
+.request-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--github-blue);
+}
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.request-id {
+  font-weight: 700;
+  color: var(--github-blue);
+}
+
+.request-type {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.request-details {
+  color: var(--github-text-secondary);
+  font-size: 0.9rem;
+}
+
+.request-notes {
+  background-color: var(--github-bg);
+  border-left: 3px solid var(--github-border);
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Form styling */
+.form-section {
+  background-color: var(--github-bg-secondary);
+  border: 1px solid var(--github-border);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-section-title {
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--github-text);
+}
+
+/* Status badges */
+.status-pending {
+  background-color: var(--github-orange);
+  color: #000;
+}
+
+.status-approved {
+  background-color: var(--github-green);
+}
+
+.status-rejected {
+  background-color: var(--github-red);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--github-text-secondary);
+}
+
+.empty-state h3 {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* Loading spinner */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+/* Alert overrides */
+.alert {
+  border: 1px solid var(--github-border);
+}
+
+.alert-success {
+  background-color: rgba(63, 185, 80, 0.1);
+  color: var(--github-green);
+  border-color: var(--github-green);
+}
+
+.alert-danger {
+  background-color: rgba(248, 81, 73, 0.1);
+  color: var(--github-red);
+  border-color: var(--github-red);
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons button {
+    width: 100%;
+  }
+}

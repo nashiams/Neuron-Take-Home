@@ -32,8 +32,6 @@ Build a working web application that addresses the client's needs. Use the provi
 
 ## Frontend Pages ↔ Backend Routes Mapping
 
-Frontend Page - Backend Routes Used
-
 routes
 
 1. POST /api/auth/login
@@ -45,12 +43,13 @@ routes
 7. GET /api/requests/my-approvals (manager only)
 
 ====
+Frontend Page - Backend Routes Used
 
-1. Login pagePOST /api/auth/login
-2. Create request formPOST /api/requests
-3. My request historyGET /api/requests/my-requests
-4. Pending requests (manager)GET /api/requests/pending-approvals PATCH /api/requests/:id/approve PATCH /api/requests/:id/reject
-5. My approved history (manager)GET /api/requests/my-approvals
+1. Login page POST /api/auth/login
+2. Create request form POST /api/requests
+3. My request history GET /api/requests/my-requests
+4. Pending requests (manager) GET /api/requests/pending-approvals PATCH /api/requests/:id/approve PATCH /api/requests/:id/reject
+5. My approved history (manager) GET /api/requests/my-approvals
 
 -- 1. departments table
 CREATE TABLE departments (
@@ -103,40 +102,39 @@ CREATE INDEX idx_requests_rejected_by ON requests(rejected_by);
 CREATE INDEX idx_employees_email ON employees(email);
 CREATE INDEX idx_employees_department_id ON employees(department_id);
 
+POST /api/requests
+Headers: { Authorization: "Bearer <token>" }
+Body: {
+type: "purchase" | "leave" | "overtime",
+details: { ... }, // based on type
+notes?: string
+}
+Response: { request: Request }
+// Auto-fills: submitted_by, submitted_at, status: "pending"
 
-POST   /api/requests
-  Headers: { Authorization: "Bearer <token>" }
-  Body: { 
-    type: "purchase" | "leave" | "overtime",
-    details: { ... },  // based on type
-    notes?: string 
-  }
-  Response: { request: Request }
-  // Auto-fills: submitted_by, submitted_at, status: "pending"
+GET /api/requests/my-requests
+Headers: { Authorization: "Bearer <token>" }
+Response: { requests: Request[] }
+// Returns requests where submitted_by === logged-in user
 
-GET    /api/requests/my-requests
-  Headers: { Authorization: "Bearer <token>" }
-  Response: { requests: Request[] }
-  // Returns requests where submitted_by === logged-in user
+GET /api/requests/pending-approvals
+Headers: { Authorization: "Bearer <token>" }
+Response: { requests: Request[] }
+// Returns pending requests from their department
 
-  GET    /api/requests/pending-approvals
-  Headers: { Authorization: "Bearer <token>" }
-  Response: { requests: Request[] }
-  // Returns pending requests from their department
+PATCH /api/requests/:id/approve
+Headers: { Authorization: "Bearer <token>" }
+Body: { notes?: string }
+Response: { request: Request }
+// Updates: status, approved_by, approved_at
 
-PATCH  /api/requests/:id/approve
-  Headers: { Authorization: "Bearer <token>" }
-  Body: { notes?: string }
-  Response: { request: Request }
-  // Updates: status, approved_by, approved_at
+PATCH /api/requests/:id/reject
+Headers: { Authorization: "Bearer <token>" }
+Body: { notes?: string }
+Response: { request: Request }
+// Updates: status, rejected_by, rejected_at
 
-PATCH  /api/requests/:id/reject
-  Headers: { Authorization: "Bearer <token>" }
-  Body: { notes?: string }
-  Response: { request: Request }
-  // Updates: status, rejected_by, rejected_at
-
-GET    /api/requests/my-approvals
-  Headers: { Authorization: "Bearer <token>" }
-  Response: { requests: Request[] }
-  // Returns requests where approved_by or rejected_by === logged-in user
+GET /api/requests/my-approvals
+Headers: { Authorization: "Bearer <token>" }
+Response: { requests: Request[] }
+// Returns requests where approved_by or rejected_by === logged-in user

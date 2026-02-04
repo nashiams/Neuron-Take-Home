@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:20
 
 WORKDIR /app
 
@@ -6,7 +6,6 @@ RUN npm install -g sequelize-cli
 
 COPY package*.json ./
 
-# Remove --omit=dev to include devDependencies needed for bcrypt compilation
 RUN npm install
 
 COPY . .
