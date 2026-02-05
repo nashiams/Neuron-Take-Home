@@ -127,6 +127,9 @@ export default function RequestList({
               <p className="mt-2 text-success">
                 <strong>Approved by:</strong> {request.approver.name} on{" "}
                 {formatDate(request.approved_at)}
+                {request.approved_by === request.submitted_by && (
+                  <span className="badge bg-info ms-2">Auto-approved</span>
+                )}
               </p>
             )}
 

@@ -23,14 +23,23 @@ class RequestController {
         newId = `req-${String(maxNumber + 1).padStart(3, "0")}`;
       }
 
+      // Check if user is a top-level manager (no manager_id)
+      const isTopLevelManager = req.employee.manager_id === null;
+
       const newRequest = await Request.create({
         id: newId,
         type,
         submitted_by: submittedBy,
         submitted_at: new Date(),
-        status: "pending",
+        status: isTopLevelManager ? "approved" : "pending",
+        approved_by: isTopLevelManager ? submittedBy : null,
+        approved_at: isTopLevelManager ? new Date() : null,
         details,
-        notes: notes || null,
+        notes: isTopLevelManager
+          ? notes
+            ? `${notes} (Auto-approved - Top-level authority)`
+            : "Auto-approved - Top-level authority"
+          : notes || null,
       });
 
       const requestWithDetails = await Request.findByPk(newId, {
@@ -39,11 +48,21 @@ class RequestController {
             association: "submitter",
             attributes: ["id", "name", "email", "role"],
           },
+          ...(isTopLevelManager
+            ? [
+                {
+                  association: "approver",
+                  attributes: ["id", "name", "email", "role"],
+                },
+              ]
+            : []),
         ],
       });
 
       res.status(201).json({
-        message: "Request created successfully",
+        message: isTopLevelManager
+          ? "Request created and auto-approved (Top-level authority)"
+          : "Request created successfully",
         request: requestWithDetails,
       });
     } catch (error) {
@@ -142,6 +161,14 @@ class RequestController {
         throw { name: "BadRequest", message: "Request is not pending" };
       }
 
+      // Prevent self-approval
+      if (request.submitted_by === managerId) {
+        throw {
+          name: "Forbidden",
+          message: "You cannot approve your own request",
+        };
+      }
+
       if (request.submitter.manager_id !== managerId) {
         throw {
           name: "Forbidden",
@@ -199,6 +226,14 @@ class RequestController {
 
       if (request.status !== "pending") {
         throw { name: "BadRequest", message: "Request is not pending" };
+      }
+
+      // Prevent self-rejection
+      if (request.submitted_by === managerId) {
+        throw {
+          name: "Forbidden",
+          message: "You cannot reject your own request",
+        };
       }
 
       if (request.submitter.manager_id !== managerId) {
