@@ -6,6 +6,7 @@ import PendingApprovals from "./pages/PendingApprovals";
 import MyApprovals from "./pages/MyApprovals";
 import MainLayout from "./components/layouts/MainLayout";
 import ManagerLayout from "./components/layouts/ManagerLayout";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/my-requests" element={<MyRequests />} />
 
           <Route element={<ManagerLayout />}>
+            <Route path="/register" element={<Register />} />
             <Route path="/pending-approvals" element={<PendingApprovals />} />
             <Route path="/my-approvals" element={<MyApprovals />} />
           </Route>

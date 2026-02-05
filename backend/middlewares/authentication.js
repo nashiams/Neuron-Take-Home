@@ -19,7 +19,6 @@ async function authentication(req, res, next) {
       throw { name: "Unauthorized", message: "Invalid token" };
     }
 
-    // Attach employee to request
     req.employee = {
       id: employee.id,
       email: employee.email,

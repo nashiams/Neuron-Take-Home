@@ -1,4 +1,7 @@
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({
+  path: path.join(__dirname, "../../deployment/.env"),
+});
 
 module.exports = {
   development: {
@@ -6,7 +9,7 @@ module.exports = {
     password: process.env.DB_PASSWORD || "postgres",
     database: process.env.DB_NAME || "approval_system",
     host: process.env.DB_HOST || "localhost",
-    port: process.env.DB_PORT || 5433,
+    port: process.env.DB_PORT || 5432,
     dialect: "postgres",
     logging: false,
   },
@@ -15,7 +18,7 @@ module.exports = {
     password: process.env.DB_PASSWORD || "postgres",
     database: "approval_system_test",
     host: process.env.DB_HOST || "localhost",
-    port: process.env.DB_PORT || 5433,
+    port: process.env.DB_PORT || 5432,
     dialect: "postgres",
     logging: false,
   },
@@ -24,7 +27,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT || 5433,
+    port: process.env.DB_PORT || 5432,
     dialect: "postgres",
   },
 };

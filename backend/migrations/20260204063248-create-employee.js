@@ -17,6 +17,10 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       role: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -35,7 +39,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
         references: {
-          model: "Employees", // FK to Employees (self-reference)
+          model: "Employees",
           key: "id",
         },
         onUpdate: "CASCADE",
@@ -63,7 +67,6 @@ module.exports = {
       },
     });
 
-    // Add indexes
     await queryInterface.addIndex("Employees", ["email"]);
     await queryInterface.addIndex("Employees", ["department_id"]);
   },

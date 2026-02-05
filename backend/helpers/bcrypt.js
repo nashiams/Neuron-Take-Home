@@ -17,17 +17,11 @@ const generatePasswordFromEmployee = (name, joinDate) => {
   return `${firstName}${formattedDate}`;
 };
 
-/**
- * Hash a password
- */
 const hashPassword = async (password) => {
   const saltRounds = 10;
   return await bcrypt.hash(password, saltRounds);
 };
 
-/**
- * Compare plain password with hashed password
- */
 const comparePassword = async (plainPassword, hashedPassword) => {
   return await bcrypt.compare(plainPassword, hashedPassword);
 };

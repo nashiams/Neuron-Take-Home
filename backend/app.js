@@ -1,5 +1,9 @@
+const path = require("path");
+
 if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
+  require("dotenv").config({
+    path: path.join(__dirname, "../deployment/.env"),
+  });
 }
 
 const express = require("express");

@@ -1,13 +1,12 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL = "http://localhost:3000";
 
 const api = axios.create({
   baseURL: API_URL,
 });
 
-// Add token to requests
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -24,7 +23,6 @@ export const useRequestStore = create((set) => ({
   loading: false,
   error: null,
 
-  // Auth
   login: async (email, password) => {
     set({ loading: true, error: null });
     try {
@@ -55,7 +53,6 @@ export const useRequestStore = create((set) => ({
     }
   },
 
-  // Create request
   createRequest: async (type, details, notes) => {
     set({ loading: true, error: null });
     try {
@@ -71,7 +68,6 @@ export const useRequestStore = create((set) => ({
     }
   },
 
-  // Get my requests
   fetchMyRequests: async () => {
     set({ loading: true, error: null });
     try {
@@ -85,7 +81,6 @@ export const useRequestStore = create((set) => ({
     }
   },
 
-  // Get pending approvals (manager)
   fetchPendingApprovals: async () => {
     set({ loading: true, error: null });
     try {
@@ -100,7 +95,6 @@ export const useRequestStore = create((set) => ({
     }
   },
 
-  // Approve request
   approveRequest: async (id, notes) => {
     set({ loading: true, error: null });
     try {
@@ -116,7 +110,6 @@ export const useRequestStore = create((set) => ({
     }
   },
 
-  // Reject request
   rejectRequest: async (id, notes) => {
     set({ loading: true, error: null });
     try {
@@ -132,7 +125,6 @@ export const useRequestStore = create((set) => ({
     }
   },
 
-  // Get my approvals (manager)
   fetchMyApprovals: async () => {
     set({ loading: true, error: null });
     try {
@@ -143,6 +135,21 @@ export const useRequestStore = create((set) => ({
         error: error.response?.data?.message || "Failed to fetch approvals",
         loading: false,
       });
+    }
+  },
+
+  registerEmployee: async (employeeData) => {
+    set({ loading: true, error: null });
+    try {
+      await api.post("/api/auth/register", employeeData);
+      set({ loading: false });
+      return true;
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to register employee",
+        loading: false,
+      });
+      return false;
     }
   },
 

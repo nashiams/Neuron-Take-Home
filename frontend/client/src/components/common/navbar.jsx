@@ -10,6 +10,10 @@ export default function Navbar() {
     navigate("/login");
   };
 
+  const isManager =
+    user?.role?.toLowerCase().includes("manager") ||
+    user?.role?.toLowerCase().includes("director");
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
@@ -36,16 +40,25 @@ export default function Navbar() {
                 Create Request
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/pending-approvals">
-                Pending Approvals
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/my-approvals">
-                My Approvals
-              </Link>
-            </li>
+            {isManager && (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/register">
+                    Register Employee
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/pending-approvals">
+                    Pending Approvals
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/my-approvals">
+                    My Approvals
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
           <div className="d-flex align-items-center">
             <span className="text-light me-3">

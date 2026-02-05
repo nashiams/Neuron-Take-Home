@@ -1,13 +1,31 @@
 "use strict";
 
+const {
+  generatePasswordFromEmployee,
+  hashPassword,
+} = require("../helpers/bcrypt");
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const data = require("./data/employees.json").map((emp) => {
-      emp.createdAt = new Date();
-      emp.updatedAt = new Date();
-      return emp;
-    });
+    const employees = require("./data/employees.json");
+
+    const data = await Promise.all(
+      employees.map(async (emp) => {
+        const plainPassword = generatePasswordFromEmployee(
+          emp.name,
+          emp.join_date,
+        );
+        const hashedPassword = await hashPassword(plainPassword);
+
+        return {
+          ...emp,
+          password: hashedPassword,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+      }),
+    );
 
     await queryInterface.bulkInsert("Employees", data, {
       ignoreDuplicates: true,
