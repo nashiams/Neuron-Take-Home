@@ -2,7 +2,12 @@
 set -e
 
 echo "Waiting for database to be ready..."
-sleep 5
+until PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "postgres" -c '\q' 2>/dev/null; do
+  >&2 echo "Postgres is unavailable - sleeping"
+  sleep 2
+done
+
+echo "Database is ready!"
 
 echo "Dropping database if exists..."
 npx sequelize-cli db:drop || true
