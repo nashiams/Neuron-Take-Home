@@ -244,3 +244,95 @@ Neuron-Take-Home/
     ├── docker-compose.yml
     └── .env              # Environment variables
 ```
+
+## Development Approach & Decisions
+
+### Architecture Decisions
+
+**Backend Architecture**
+
+- Chose **Express.js** for its simplicity and robust middleware ecosystem
+- Implemented **Sequelize ORM** for type-safe database operations and easy migrations
+- Used **JWT** for stateless authentication, making the API scalable
+- Structured code using **MVC pattern** for maintainability and separation of concerns
+
+**Frontend Architecture**
+
+- Selected **React with Vite** for fast development experience and optimized production builds
+- Used **Zustand** over Redux for simpler state management with less boilerplate
+- Implemented **component-based architecture** for reusability
+- Applied **Bootstrap 5** for rapid UI development with consistent design
+
+**Database Design**
+
+- Normalized database schema to minimize data redundancy
+- Implemented proper foreign key relationships for data integrity
+- Used Sequelize migrations for version-controlled database changes
+- Created indexing for fast lookup
+- Created comprehensive seed data for testing scenarios
+
+**Containerization**
+
+- Used **Docker Compose** for consistent development environments
+- Separated backend and frontend containers for independent scaling
+- Implemented health checks and proper networking between services
+- Created volume mounts for development hot-reloading
+
+### Key Implementation Decisions
+
+2. **Role-Based Access Control**: Used middleware-based authorization for clean separation of concerns
+3. **Password Security**: Used bcrypt with proper salt rounds for secure password hashing
+4. **Error Handling**: Centralized error handling middleware for consistent API responses
+5. **Request Validation**: Input validation at controller level to prevent invalid data
+
+### Testing Strategy
+
+- Focused on **integration tests** to verify complete workflows
+- Tested authentication flow, request creation, and approval processes
+- Used **Jest and Supertest** for API testing
+- Achieved coverage of critical business logic paths
+
+### Challenges & Solutions
+
+**Challenge**: Managing complex approval hierarchies
+**Solution**: Implemented recursive querying with Sequelize associations
+
+**Challenge**: Frontend state management across multiple pages
+**Solution**: Centralized state with Zustand for predictable data flow
+
+## AI Tools Usage
+
+### Tools Used
+
+- **GitHub Copilot**: Code completion, boilerplate generation, and test writing
+- **ChatGPT/Claude**: Architecture planning, debugging assistance, and documentation
+
+### AI Effectiveness
+
+**Most Helpful:**
+
+- Generating Sequelize migration and model boilerplate code
+- Writing Jest test cases with various edge cases
+- Creating Docker Compose configuration with proper networking
+- Suggesting error handling patterns and middleware structure
+- Generating seed data in JSON format
+
+**Least Helpful:**
+
+- Understanding complex business logic for approval workflows (required manual design)
+- Handling Sequelize association queries (AI suggestions often had incorrect syntax)
+- Debugging React state management issues (AI couldn't see full component context)
+
+### Significant Corrections Made
+
+1. **Database Associations**: AI initially suggested incorrect `include` syntax for nested Sequelize queries. Had to manually restructure queries to properly fetch manager and department relationships.
+
+2. **Docker Networking**: Initial AI suggestion used `localhost` for service connections, which doesn't work in Docker. Changed to use service names defined in docker-compose.yml.
+
+3. **React Route Protection**: AI suggested basic route guards, but didn't account for role-based redirects. Implemented custom logic to redirect employees vs managers to appropriate dashboards.
+
+4. **Test Data Consistency**: AI-generated seed data had inconsistent foreign key relationships. Manually verified and corrected all employee-department and request-employee references.
+
+### AI Usage Philosophy
+
+Used AI as a **productivity accelerator** rather than a replacement for critical thinking. All AI-generated code was reviewed, tested, and modified as needed. The approval workflow logic, security implementations, and architecture decisions were primarily human-driven with AI assisting in implementation details.
